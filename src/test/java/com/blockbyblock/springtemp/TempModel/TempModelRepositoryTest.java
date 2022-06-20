@@ -8,17 +8,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
 public class TempModelRepositoryTest {
 
   @Autowired
-  private TempModelRepository tempModelRepository;
+  private TempModelRepository underTest;
 
   @AfterEach
   void tearDown() {
-    tempModelRepository.deleteAll();
+    underTest.deleteAll();
   }
 
   @Test
@@ -28,8 +28,8 @@ public class TempModelRepositoryTest {
       name, LocalDate.now()
     );
 
-    tempModelRepository.save(tempModel);
-    boolean expected = tempModelRepository.findByName(name).isPresent();
+    underTest.save(tempModel);
+    boolean expected = underTest.findByName(name).isPresent();
 
     assertThat(expected).isTrue();
   }
@@ -39,7 +39,7 @@ public class TempModelRepositoryTest {
   void itShouldFailIfTempModelNameDoesNotExists() {
     String name = "test1";
 
-    boolean expected = tempModelRepository.findByName(name).isPresent();
+    boolean expected = underTest.findByName(name).isPresent();
 
     assertThat(expected).isFalse();
   }

@@ -4,50 +4,69 @@ import static org.mockito.Mockito.verify;
 
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+// import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+import com.blockbyblock.springtemp.TempModel.exception.BadRequestException;
 
 @ExtendWith(MockitoExtension.class)
 public class TempModelServiceTest {
   @Mock
   private TempModelRepository tempModelRepository;
-  private AutoCloseable autoCloseable;
-  private TempModelService tempModelService;
+  // private AutoCloseable autoCloseable;
+  private TempModelService underTest;
 
   @BeforeEach
   void setUp() {
-    autoCloseable = MockitoAnnotations.openMocks(this);
-    tempModelService = new TempModelService(tempModelRepository);
+    // autoCloseable = MockitoAnnotations.openMocks(this);
+    underTest = new TempModelService(tempModelRepository);
   }
 
-  @AfterEach
-  void tearDown() throws Exception {
-    autoCloseable.close();
-  }
+  // @AfterEach
+  // void tearDown() throws Exception {
+  //   autoCloseable.close();
+  // }
 
   @Test
   void itShouldGetAllTempModels() {
-    tempModelService.getTempModels();
+    underTest.getTempModels();
     verify(tempModelRepository).findAll();
   }
 
   @Test
   void itShouldAddTempModel() {
     TempModel tempModel = new TempModel("testOne", LocalDate.now());
-    tempModelService.addTempModel(tempModel);
+    underTest.addTempModel(tempModel);
 
     ArgumentCaptor<TempModel> tempModelArgumentCaptor = ArgumentCaptor.forClass(TempModel.class);
     verify(tempModelRepository).save(tempModelArgumentCaptor.capture());
 
     TempModel savedTempModel = tempModelArgumentCaptor.getValue();
     assertThat(savedTempModel).isEqualTo(tempModel);
+  }
+
+  @Test
+  void itShouldThrowWhenNameIsTaken() {
+    TempModel tempModel = new TempModel("testOne", LocalDate.now());
+
+    given(tempModelRepository.existsByName(tempModel.getName())).willReturn(true);
+
+    assertThatThrownBy(() -> underTest.addTempModel(tempModel))
+        .isInstanceOf(BadRequestException.class)
+        .hasMessageContaining("TempModel already exists for " + tempModel.getName());
+
+    verify(tempModelRepository, never()).save(any());
   }
 }

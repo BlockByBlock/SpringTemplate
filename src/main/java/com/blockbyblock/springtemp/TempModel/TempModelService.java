@@ -26,11 +26,11 @@ public class TempModelService {
 	}
 
 	public void addTempModel(TempModel tempModel) {
-		Optional<TempModel> existingTempModel = tempModelRepository
-			.findByName(tempModel.getName());
+		Boolean exists = tempModelRepository
+			.existsByName(tempModel.getName());
 
-		if (existingTempModel.isPresent()) {
-			throw new BadRequestException("TempModel already exists");
+		if (exists) {
+			throw new BadRequestException("TempModel already exists for " + tempModel.getName());
 		}
 	
 		tempModelRepository.save(tempModel);
