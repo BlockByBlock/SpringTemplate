@@ -3,6 +3,7 @@ package com.blockbyblock.springtemp.TempModel;
 import java.time.LocalDate;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -34,6 +35,7 @@ public class TempModelRepositoryTest {
   }
 
   @Test
+  @Disabled("This test is disabled because it is not implemented yet")
   void itShouldFailIfTempModelNameDoesNotExists() {
     String name = "test1";
 
