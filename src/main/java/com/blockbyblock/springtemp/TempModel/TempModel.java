@@ -19,22 +19,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TempModel {
-    @Id
-    @SequenceGenerator(
-        name = "temp_model_seq",
-        sequenceName = "temp_model_seq",
-        allocationSize = 1
-    )
-    @GeneratedValue(
-        generator = "temp_model_seq",
-        strategy = GenerationType.SEQUENCE
-    )
-    private Long id;
-    private String name;
-    private LocalDate createdTime;
+	@Id
+	@SequenceGenerator(name = "temp_model_seq", sequenceName = "temp_model_seq", allocationSize = 1)
+	@GeneratedValue(generator = "temp_model_seq", strategy = GenerationType.SEQUENCE)
+	private Long id;
+	private String name;
+	private LocalDate createdTime;
 
-    public TempModel(String name, LocalDate createdTime) {
-        this.name = name;
-        this.createdTime = createdTime;
-    }
+	public TempModel(String name, LocalDate createdTime) {
+		this.name = name;
+		this.createdTime = createdTime;
+	}
 }
