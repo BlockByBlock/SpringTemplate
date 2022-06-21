@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -21,6 +22,9 @@ import static org.mockito.Mockito.verify;
 
 import com.blockbyblock.springtemp.TempModel.exception.BadRequestException;
 
+@TestPropertySource(
+  locations = "classpath:applicationtm.properties"
+)
 @ExtendWith(MockitoExtension.class)
 public class TempModelServiceTest {
   @Mock
