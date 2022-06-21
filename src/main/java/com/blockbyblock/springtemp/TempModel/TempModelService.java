@@ -9,6 +9,12 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.AllArgsConstructor;
+
+import com.blockbyblock.springtemp.TempModel.exception.BadRequestException;
+import com.blockbyblock.springtemp.TempModel.exception.NotFoundException;
+
+@AllArgsConstructor
 @Service
 public class TempModelService {
   
@@ -20,11 +26,11 @@ public class TempModelService {
 	}
 
 	public void addTempModel(TempModel tempModel) {
-		Optional<TempModel> existingTempModel = tempModelRepository
-			.findByName(tempModel.getName());
+		Boolean exists = tempModelRepository
+			.existsByName(tempModel.getName());
 
-		if (existingTempModel.isPresent()) {
-			throw new IllegalStateException("TempModel already exists");
+		if (exists) {
+			throw new BadRequestException("TempModel already exists for " + tempModel.getName());
 		}
 	
 		tempModelRepository.save(tempModel);
@@ -33,7 +39,7 @@ public class TempModelService {
 	public void deleteTempModel(Long id) {
 		boolean exists = tempModelRepository.existsById(id);
 		if (!exists) {
-			throw new IllegalStateException("TempModel does not exist for id: " + id);
+			throw new NotFoundException("TempModel does not exist for id: " + id);
 		}
 
 		tempModelRepository.deleteById(id);
@@ -43,7 +49,7 @@ public class TempModelService {
 	public void updateTempModel(Long id, String name) {
 		TempModel existingTempModel = tempModelRepository
 			.findById(id)
-			.orElseThrow(() -> new IllegalStateException("TempModel does not exist for id: " + id));
+			.orElseThrow(() -> new NotFoundException("TempModel does not exist for id: " + id));
 		
 		if (name != null 
 			&& name.length() > 0
