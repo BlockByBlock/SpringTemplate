@@ -14,7 +14,7 @@ public interface TempModelRepository
   Optional<TempModel> findByName(String name);
 
   @Query("" +
-            "SELECT CASE WHEN COUNT(s) > 0 THEN " +
+            "SELECT CASE WHEN COUNT(t) > 0 THEN " +
             "TRUE ELSE FALSE END " +
             "FROM TempModel t " +
             "WHERE t.name = ?1"
