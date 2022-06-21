@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @TestPropertySource(
-  "classpath:applicationit.properties"
+  locations = "classpath:applicationit.properties"
 )
 @AutoConfigureMockMvc
 public class TempModelIT {
