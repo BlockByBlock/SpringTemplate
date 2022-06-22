@@ -76,7 +76,7 @@ public class TempModelIT {
     resultActions.andExpect(status().isOk());
     List<TempModel> tempModels = tempModelRepository.findAll();
     assertThat(tempModels)
-      .usingElementComparatorIgnoringFields("id")
+      .usingRecursiveFieldByFieldElementComparatorIgnoringFields("id")
       .contains(tempModel);
   }
 
